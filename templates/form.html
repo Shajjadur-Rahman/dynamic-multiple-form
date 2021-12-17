@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <title>Title</title>
+    <style>
+        .inner_form{
+            display: flex;
+            align-item: center;
+            justify-content: center;
+        }
+        .inner_form .form_left,
+        .inner_form .form_right{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div clas="form_wrapper" style="width: 70%; margin: 50px auto">
+    <h2>MatchScheduleWrap</h2>
+<form action="." method="POST"> {% csrf_token %}
+    {{ match_scheduler_form.as_p }}
+    <hr/>
+
+    <div class="inner_form">
+        <div class="form_left">
+            <h2>ScheduleTeam</h2>
+            <div id="st_form_list">
+                {{ st_formset.management_form }}
+                {% for form in st_formset %}
+                <div class="st_form">
+                    {{ form.as_p }}
+                </div>
+                {% endfor %}
+            </div>
+                <div id="st_empty_form" class="d-none">{{ st_formset.empty_form.as_p }}</div>
+              <button type="button" id="add_more_schedule_team" class="btn btn-success">Add More</button>
+        </div>
+
+        <div class="form_right">
+             <h2>ScheduleList</h2>
+            <div  id="sl_form_list">
+
+                {% for form2 in sl_formset %}
+                <div class="sl_form">
+                    {{ form2.as_p }}
+                </div>
+                {% endfor %}
+            </div>
+            <div id="sl_empty_form" class="d-none">{{ sl_formset.empty_form.as_p }}</div>
+              <button type="button" id="add_more_schedule_list" class="btn btn-success">Add More</button>
+        </div>
+
+    </div>
+
+
+
+  <button type="submit" class="btn btn-primary my-4">Submit</button>
+
+
+</form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
+
+<script>
+
+    const addScheduleTeamBtn = document.getElementById("add_more_schedule_team")
+    const totalStForm         = document.getElementById("id_form-TOTAL_FORMS")
+                              addScheduleTeamBtn.addEventListener("click", (event) => {
+                                if(event){
+                                event.preventDefault()
+                                };
+                              const stFormList = document.getElementById("st_form_list")
+                              const addedNewStForm = document.getElementsByClassName("st_form").length
+                                    console.log(addedNewStForm)
+                                    console.log(totalStForm)
+                              const stEmptyForm = document.getElementById("st_empty_form").cloneNode(true)
+                                    stEmptyForm.setAttribute("class", "st_form")
+                                    stEmptyForm.setAttribute("id", `form-${addedNewStForm}`)
+                                    const regex = new RegExp('__prefix__', 'g')
+                                    stEmptyForm.innerHTML = stEmptyForm.innerHTML.replace(regex, addedNewStForm)
+                                    totalStForm.setAttribute("value", `${addedNewStForm + 1}`)
+                                    stFormList.append(stEmptyForm)
+                              });
+
+    const addScheduleListBtn = document.getElementById("add_more_schedule_list")
+    const totalSlForm        = document.getElementById("id_form-TOTAL_FORMS")
+                             addScheduleListBtn.addEventListener("click", (event) => {
+                                if(event){
+                                event.preventDefault()
+                                };
+                          const slFormList = document.getElementById("sl_form_list")
+                          const addedNewSlForm = document.getElementsByClassName("sl_form").length
+                          console.log(addedNewSlForm)
+                          console.log(totalSlForm)
+                          const slEmptyForm = document.getElementById("sl_empty_form").cloneNode(true)
+                                slEmptyForm.setAttribute("class", "sl_form")
+                                slEmptyForm.setAttribute("id", `form-${addedNewSlForm}`)
+                                const reGex_2 = new RegExp('__prefix__', 'g')
+                                slEmptyForm.innerHTML = slEmptyForm.innerHTML.replace(reGex_2, addedNewSlForm)
+                                totalSlForm.setAttribute("value", `${addedNewSlForm+1}`)
+                                slFormList.append(slEmptyForm)
+                          });
+
+
+</script>
+
+</body>
+</html>
